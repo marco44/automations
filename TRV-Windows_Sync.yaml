@@ -44,17 +44,17 @@ action:
   - repeat:
       for_each: !input trv_entity
       sequence:
-        - if:
-            - condition: trigger
-              id:
-                - window_open
-          then:
-            - service: climate.set_hvac_mode
-              entity_id: repeat.item
-              data:
-                hvac_mode: "off"
-          else:
-            - service: climate.set_hvac_mode
-              entity_id: repeat.item
+      - if:
+          - condition: trigger
+            id:
+              - window_open
+        then:
+          - service: climate.set_hvac_mode
+            entity_id: repeat.item
+            data:
+              hvac_mode: "off"
+        else:
+          - service: climate.set_hvac_mode
+            entity_id: repeat.item
               data:
                 hvac_mode: heat
