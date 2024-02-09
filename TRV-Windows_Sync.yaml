@@ -41,20 +41,17 @@ condition:
     entity_id: input_boolean.chauffage_mode_ete
     state: "off"
 action:
-  - repeat:
-      for_each: !input trv_entities
-      sequence:
-      - if:
-          - condition: trigger
-            id:
-              - window_open
-        then:
-          - service: climate.set_hvac_mode
-            entity_id: "{{ repeat.item }}"
-            data:
-              hvac_mode: "off"
-        else:
-          - service: climate.set_hvac_mode
-            entity_id: "{{ repeat.item }}"
-            data:
-              hvac_mode: heat
+  - if:
+      - condition: trigger
+        id:
+          - window_open
+    then:
+      - service: climate.set_hvac_mode
+        entity_id: !input trv_entities
+        data:
+          hvac_mode: "off"
+    else:
+      - service: climate.set_hvac_mode
+        entity_id: !input trv_entities
+        data:
+          hvac_mode: heat
