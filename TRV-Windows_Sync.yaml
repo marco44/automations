@@ -42,7 +42,7 @@ condition:
     state: "off"
 action:
   - repeat:
-      for_each: "{{ trv_entity }}"
+      for_each: !input trv_entity
       sequence:
         - if:
             - condition: trigger
