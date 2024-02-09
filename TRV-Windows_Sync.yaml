@@ -1,0 +1,56 @@
+blueprint:
+  name: TRV-Windows Sync
+  description: Turn off TRV(s) on window(s) open
+  domain: automation
+  input:
+    window_entity:
+      selector:
+        entity:
+          domain:
+            - binary_sensor
+    trv_entity:
+      selector:
+        entity:
+          domain:
+            - climate
+    reaction_time:
+      selector: 
+        duration:
+      default:
+        hours: 0
+        minutes: 2
+        seconds: 0
+alias: test_automation_chambre_marc
+description: ""
+trigger:
+  - platform: state
+    entity_id: !input window_entity
+    from: "off"
+    to: "on"
+    for: !input reaction_time
+    id: window_open
+  - platform: state
+    entity_id: !input window_entity
+    from: "on"
+    to: "off"
+    id: window_closed
+    for: !input reaction_time
+condition:
+  - condition: state
+    entity_id: input_boolean.chauffage_mode_ete
+    state: "off"
+action:
+  - if:
+      - condition: trigger
+        id:
+          - window_open
+    then:
+      - service: climate.set_hvac_mode
+        entity_id: !input trv_entity
+        data:
+          hvac_mode: "off"
+    else:
+      - service: climate.set_hvac_mode
+        entity_id: !input trv_entity
+        data:
+          hvac_mode: heat
