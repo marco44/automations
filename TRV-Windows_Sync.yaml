@@ -21,8 +21,6 @@ blueprint:
         hours: 0
         minutes: 2
         seconds: 0
-variables:
-  trv_entities: !input trv_entities
 alias: test_automation_chambre_marc
 description: ""
 trigger:
@@ -44,7 +42,7 @@ condition:
     state: "off"
 action:
   - repeat:
-      for_each: "{{ trv_entities }}"
+      for_each: !input trv_entities
       sequence:
       - if:
           - condition: trigger
