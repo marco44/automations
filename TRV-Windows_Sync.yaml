@@ -8,7 +8,7 @@ blueprint:
         entity:
           domain:
             - binary_sensor
-    trv_entity:
+    trv_entities:
       selector:
         entity:
           domain:
@@ -21,6 +21,8 @@ blueprint:
         hours: 0
         minutes: 2
         seconds: 0
+variables:
+  trv_entities: !input trv_entities
 alias: test_automation_chambre_marc
 description: ""
 trigger:
@@ -42,7 +44,7 @@ condition:
     state: "off"
 action:
   - repeat:
-      for_each: !input trv_entity
+      for_each: {{ trv_entities }}
       sequence:
       - if:
           - condition: trigger
