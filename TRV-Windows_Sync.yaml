@@ -56,5 +56,5 @@ action:
         else:
           - service: climate.set_hvac_mode
             entity_id: repeat.item
-              data:
-                hvac_mode: heat
+            data:
+              hvac_mode: heat
