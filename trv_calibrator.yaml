@@ -49,12 +49,12 @@ trigger:
       hours: 0
       minutes: 0
       seconds: 0
-  - platform: state
-    entity_id: !input trv_calibration_number
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 0
+#  - platform: state
+#    entity_id: !input trv_calibration_number
+#    for:
+#      hours: 0
+#      minutes: 0
+#      seconds: 0
   - platform: state
     entity_id: !input temperature_sensor
     for:
