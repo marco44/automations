@@ -1,3 +1,4 @@
+# Imported from https://github.com/rotilho/home-assistant-blueprints/blob/main/trv_calibrator.yaml
 blueprint:
   name: TRV Calibrator
   description: Calibrate your TRV using an external sensor
