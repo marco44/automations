@@ -23,7 +23,7 @@ blueprint:
       selector:
         entity:
           domain: number
-          #device_class: temperature
+          device_class: climate
     delay_input:
       name: Delay
       description: Don't update the TRV more than every...
