@@ -31,10 +31,11 @@ blueprint:
         duration:
       default:
         hours: 0
-        minutes: 5
+        minutes: 2
         seconds: 0
 
-mode: single
+# We want the latest state to be the one that's going to be applied, so we want to be "suicided" before applying if someone else comes in  in the delay_input
+mode: restart
 
 
 variables:
@@ -71,6 +72,7 @@ condition:
     value_template: '{{ states(temperature_sensor) != "unavailable" and states(temperature_sensor) != "unknown" }}'
 
 action:
+  - delay: !input delay_input
   - service: number.set_value
     target:
       entity_id: !input trv_calibration_number
@@ -101,4 +103,4 @@ action:
             {%- else -%}
               {{ states(trv_calibration_number) }}
             {%- endif %}
-  - delay: !input delay_input
+  
