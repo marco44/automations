@@ -14,28 +14,36 @@ blueprint:
           domain:
             - climate
           multiple: true
-    reaction_time:
+    reaction_time_open:
       selector: 
         duration:
       default:
         hours: 0
         minutes: 2
         seconds: 0
-alias: test_automation_chambre_marc
+    reaction_time_close:
+      selector: 
+        duration:
+      default:
+        hours: 0
+        minutes: 10
+        seconds: 0
+
+alias: Synchronize TRV with its window(s)
 description: ""
 trigger:
   - platform: state
     entity_id: !input window_entity
     from: "off"
     to: "on"
-    for: !input reaction_time
+    for: !input reaction_time_open
     id: window_open
   - platform: state
     entity_id: !input window_entity
     from: "on"
     to: "off"
     id: window_closed
-    for: !input reaction_time
+    for: !input reaction_time_close
 condition:
   - condition: state
     entity_id: input_boolean.chauffage_mode_ete
