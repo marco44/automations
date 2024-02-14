@@ -26,12 +26,12 @@ blueprint:
           #device_class: temperature
     delay_input:
       name: Delay
-      description: Don't update the TRV more than every..., when the sensor's temperature is stable
+      description: Don't update the TRV more than every...
       selector:
         duration:
       default:
-        hours: 1
-        minutes: 0
+        hours: 0
+        minutes: 2
         seconds: 0
 
 # We want the latest state to be the one that's going to be applied, so we want to be "suicided" before applying if someone else comes in  in the delay_input
@@ -42,22 +42,26 @@ variables:
   trv: !input trv
   trv_calibration_number: !input trv_calibration_number
   temperature_sensor: !input temperature_sensor
-  delay_input: !input delay_input
 
 trigger:
   - platform: state
-    entity_id: !input temperature_sensor
-    # empty to means any state that stays the same for that long
-    to:
+    entity_id: !input trv
     for:
-      !input delay_input
-
+      hours: 0
+      minutes: 0
+      seconds: 0
 #  - platform: state
 #    entity_id: !input trv_calibration_number
 #    for:
 #      hours: 0
 #      minutes: 0
 #      seconds: 0
+  - platform: state
+    entity_id: !input temperature_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
 
 condition:
   - condition: template
@@ -68,7 +72,7 @@ condition:
     value_template: '{{ states(temperature_sensor) != "unavailable" and states(temperature_sensor) != "unknown" }}'
 
 action:
-  #  - delay: !input delay_input
+  - delay: !input delay_input
   - service: number.set_value
     target:
       entity_id: !input trv_calibration_number
@@ -99,4 +103,4 @@ action:
             {%- else -%}
               {{ states(trv_calibration_number) }}
             {%- endif %}
-
+  
