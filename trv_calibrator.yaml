@@ -45,9 +45,13 @@ variables:
   delay_input: !input delay_input
 
 trigger:
-  - platform: template
-    value_template: >
-        {{ now() - temperature_sensor.last_changed >= timedelta(delay_input) }}
+  - platform: state
+    entity_id: !input temperature_sensor
+    # empty to means any state that stays the same for that long
+    to:
+    for:
+      !input delay_input
+
 #  - platform: state
 #    entity_id: !input trv_calibration_number
 #    for:
