@@ -28,7 +28,7 @@ blueprint:
         hours: 0
         minutes: 10
         seconds: 0
-
+mode: restart
 alias: Synchronize TRV with its window(s)
 description: ""
 trigger:
