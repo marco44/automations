@@ -15,9 +15,10 @@ mode: restart
 
 
 variables:
-  trv: !input trv
   device_ieee: "{{ (device_attr(trv, 'identifiers')|list).0.1 }}"
 
+trigger_variables:
+  trv: !input trv
 
 trigger:
   - platform: template
