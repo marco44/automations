@@ -16,6 +16,8 @@ mode: restart
 
 variables:
   device_ieee: "{{ (device_attr(trv, 'identifiers')|list).0.1 }}"
+
+trigger_variables:
   trv: !input trv
 
 
@@ -23,9 +25,9 @@ trigger:
   - platform: template
     value_template: >-
       {{
-      trv.attributes.current_temperature
+      state_attr(trv, 'current_temperature')
       + 0.5 <
-      trv.attributes.temperature }}
+      state_attr(trv,'temperature') }}
     for:
       hours: 0
       minutes: 0
