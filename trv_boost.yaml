@@ -1,0 +1,48 @@
+blueprint:
+  name: TRV Booster
+  description: Boost the TRV when temperature is below target (makes sure it is open)
+  domain: automation
+
+  input:
+    trv:
+      name: Smart TRV
+      selector:
+        entity:
+          domain: climate
+
+# We want the latest state to be the one that's going to be applied
+mode: restart
+
+
+variables:
+  trv: !input trv
+  device_ieee: "{{ (device_attr(trv, 'identifiers')|list).0.1 }}"
+
+
+trigger:
+  - platform: template
+    value_template: >-
+      {{
+      trv.attributes.current_temperature
+      + 0.5 <
+      trv.attributes.temperature }}
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  - platform: state
+    entity_id: !input trv
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+
+action:
+  service: zha.set_zigbee_cluster_attribute
+  data:
+    cluster_type: in
+    ieee: "{{ device_ieee }}"
+    endpoint_id: 1
+    cluster_id: 61184
+    attribute: 613
+    value: "300"
