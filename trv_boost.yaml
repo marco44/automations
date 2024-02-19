@@ -10,7 +10,7 @@ blueprint:
         entity:
           domain: climate
 
-# We want the latest state to be the one that's going to be applied
+# We want the latest state to be the one that's going to be applied (we sleep 30s whatever happens, in case the trigger is human input)
 mode: restart
 
 
@@ -34,11 +34,12 @@ trigger:
       seconds: 0
 
 action:
-  service: zha.set_zigbee_cluster_attribute
-  data:
-    cluster_type: in
-    ieee: "{{ device_ieee }}"
-    endpoint_id: 1
-    cluster_id: 61184
-    attribute: 613
-    value: "300"
+  - delay: 30
+  - service: zha.set_zigbee_cluster_attribute
+    data:
+      cluster_type: in
+      ieee: "{{ device_ieee }}"
+      endpoint_id: 1
+      cluster_id: 61184
+      attribute: 613
+      value: "300"
