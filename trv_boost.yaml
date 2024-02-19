@@ -28,12 +28,6 @@ trigger:
       trv.attributes.temperature }}
     for:
       hours: 0
-      minutes: 5
-      seconds: 0
-  - platform: state
-    entity_id: !input trv
-    for:
-      hours: 0
       minutes: 0
       seconds: 0
 
