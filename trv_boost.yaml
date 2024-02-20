@@ -34,8 +34,8 @@ trigger:
     value_template: >-
       {{
       (states(temperature_sensor) | float)
-      + 0.5 <
-      state_attr(trv,'temperature') }}
+      + (0.5 | float) <
+      (state_attr(trv,'temperature') | float) }}
     for:
       hours: 0
       minutes: 0
