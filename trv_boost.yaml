@@ -33,7 +33,7 @@ trigger:
   - platform: template
     value_template: >-
       {{
-      states(temperature_sensor)
+      (states(temperature_sensor) | float)
       + 0.5 <
       state_attr(trv,'temperature') }}
     for:
