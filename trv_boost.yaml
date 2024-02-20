@@ -6,10 +6,17 @@ blueprint:
   input:
     trv:
       name: Smart TRV
+      description: The TRV to force
       selector:
         entity:
           domain: climate
-
+    temp:
+      name: Temperature Sensor
+      description: Sensor used to measure temperature changes
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
 # We want the latest state to be the one that's going to be applied (we sleep 30s whatever happens, in case the trigger is human input)
 mode: restart
 
@@ -19,13 +26,14 @@ variables:
 
 trigger_variables:
   trv: !input trv
+  temp: !input temp
 
 
 trigger:
   - platform: template
     value_template: >-
       {{
-      state_attr(trv, 'current_temperature')
+      temp
       + 0.5 <
       state_attr(trv,'temperature') }}
     for:
