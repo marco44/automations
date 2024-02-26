@@ -28,6 +28,8 @@ blueprint:
         hours: 0
         minutes: 10
         seconds: 0
+variables:
+  trv_entities: !input trv_entities
 mode: restart
 alias: Synchronize TRV with its window(s)
 description: ""
