@@ -56,7 +56,7 @@ action:
     then:
       - service: scene.create
         data:
-          scene_id: "before_window_open {{ trv_entities|join('-') }}"
+          scene_id: "before_window_open_{{ trv_entities|join('-') }}"
           snapshot_entities: !input trv_entities
       - service: climate.set_temperature
         target:
