@@ -58,7 +58,7 @@ action:
     then:
       - service: scene.create
         data:
-          scene_id: "before_window_open_{{ this.attributes.friendly_name }}"
+          scene_id: "before_window_open_{{ this.attributes.friendly_name|slugify }}"
           snapshot_entities: !input trv_entities
       - service: climate.set_temperature
         target:
@@ -68,4 +68,4 @@ action:
     else:
       - service: scene.turn_on
         target:
-          entity_id: "scene.{{ trigger_id }}_before_window_open"
+          entity_id: "scene.before_window_open_{{ this.attributes.friendly_name|slugify }}"
