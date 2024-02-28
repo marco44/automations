@@ -50,4 +50,4 @@ action:
       endpoint_id: 1
       cluster_id: 61184
       attribute: 613
-      value: "300"
+      value: "30"
