@@ -1,0 +1,37 @@
+-------------- delta_temperature_coldest
+
+
+{# if at least 2 devices are missing 0.5 degrees, ready to heat the house #}
+{%- set ns = namespace(delta_heating = 100, room_temp_sensor = undef) -%}
+{%- for device in states.climate -%}
+  {#- Find the temperature sensor in that room -#}
+   {%- for area_entityid in area_entities(area_id(device.entity_id)) -%}
+     {%- for sensor_entity in (states.sensor|selectattr('entity_id','match','.*temperature$')) -%}
+       {%- if area_entityid == sensor_entity.entity_id -%}
+         {%- set ns.room_temp= (states(sensor_entity.entity_id) |float) -%}
+       {%- endif -%}
+     {%- endfor -%}
+   {%- endfor -%}
+  {%- if ns.room_temp is not none -%}
+    {%- set local_delta = ns.room_temp- device.attributes.temperature -%}
+    {% if local_delta < ns.delta_heating %}
+      {% set ns.delta_heating = local_delta %}
+   {#{{ device }}
+   {{  device.attributes.temperature }} {{ ns.room_temp }} {{ local_delta }}  {{ ns.delta_heating }}   #}
+   {% endif %}
+  {%- endif -%}
+{%- endfor -%}
+{{ ns.delta_heating }}
+
+
+-------------------- wants_heating
+{# if at least 2 devices are missing 0.5 degrees, ready to heat the house #}
+{% set ns = namespace(need_heating = 0) %}
+{% for device in states.climate %}
+  {%if device.attributes.temperature is not none  %}
+    {% if device.attributes.current_temperature + 0.5 <  device.attributes.temperature %}
+      {% set ns.need_heating = ns.need_heating+1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{{ ns.need_heating >1 }}
