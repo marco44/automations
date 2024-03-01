@@ -15,14 +15,14 @@ blueprint:
             - climate
           multiple: true
     reaction_time_open:
-      selector: 
+      selector:
         duration:
       default:
         hours: 0
         minutes: 2
         seconds: 0
     reaction_time_close:
-      selector: 
+      selector:
         duration:
       default:
         hours: 0
@@ -52,9 +52,13 @@ condition:
     state: "off"
 action:
   - if:
-      - condition: trigger
-        id:
-          - window_open
+      - and:
+        - condition: trigger
+          id:
+            - window_open
+        - condition: template
+          # any 5 ? means we don't want to overwrite the automatic scene. someone has opened, closed and changed their mind before the scene has been restored
+          value_template: {{ (trv_entities.attributes|map(attribute='temperature')|max) == 5 }}
     then:
       - service: scene.create
         data:
