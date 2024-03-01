@@ -52,18 +52,19 @@ condition:
     state: "off"
 action:
   - if:
-      - and:
-          - condition: trigger
-            id:
-              - window_open
+      - condition: trigger
+        id:
+          - window_open
+    then:
+      - if:
           - condition: template
             # any 5 ? means we don't want to overwrite the automatic scene. someone has opened, closed and changed their mind before the scene has been restored
             value_template: "{{ (trv_entities.attributes|map(attribute='temperature')|max) == 5 }}"
-    then:
-      - service: scene.create
-        data:
-          scene_id: "before_window_open_{{ this.attributes.friendly_name|slugify }}"
-          snapshot_entities: !input trv_entities
+        then:
+          - service: scene.create
+            data:
+              scene_id: "before_window_open_{{ this.attributes.friendly_name|slugify }}"
+              snapshot_entities: !input trv_entities
       - service: climate.set_temperature
         target:
           entity_id: !input trv_entities
