@@ -59,7 +59,7 @@ action:
       - if:
           - condition: template
             # any 5 ? means we don't want to overwrite the automatic scene. someone has opened, closed and changed their mind before the scene has been restored
-            value_template: "{{ (trv_entities.attributes|map(attribute='temperature')|max) != 5 }}"
+            value_template: "{{ (trv_entities|map(attribute='attributes')|map(attribute='temperature')|max) != 5 }}"
         then:
           - service: scene.create
             data:
