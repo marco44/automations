@@ -56,12 +56,12 @@ trigger:
 #      hours: 0
 #      minutes: 0
 #      seconds: 0
-#  - platform: state
-#    entity_id: !input temperature_sensor
-#    for:
-#      hours: 0
-#      minutes: 0
-#      seconds: 0
+  - platform: state
+    entity_id: !input temperature_sensor
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
 
 condition:
   - condition: template
