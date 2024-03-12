@@ -71,6 +71,11 @@ action:
         data:
           temperature: 5
     else:
-      - service: scene.turn_on
-        target:
-          entity_id: "scene.before_window_open_{{ this.attributes.friendly_name|slugify }}"
+      - if:
+          - condition: template
+            # no 5 ? means we don't want to reload the automatic scene. someone has opened, closed and changed their mind before the scene has been saved
+            value_template: "{{ (trv_entities|map('state_attr','temperature')|max) == 5 }}"
+        then:
+          - service: scene.turn_on
+            target:
+              entity_id: "scene.before_window_open_{{ this.attributes.friendly_name|slugify }}"
