@@ -54,12 +54,18 @@ action:
         id:
           - window_open
     then:
-      - service: climate.set_hvac_mode
-        entity_id: !input trv_entities
+      - service: retry.actions
         data:
-          hvac_mode: "off"
+          sequence:
+            - service: climate.set_hvac_mode
+              entity_id: !input trv_entities
+              data:
+                hvac_mode: "off"
     else:
-      - service: climate.set_hvac_mode
-        entity_id: !input trv_entities
+      - service: retry.actions
         data:
-          hvac_mode: heat
+          sequence:
+            - service: climate.set_hvac_mode
+              entity_id: !input trv_entities
+              data:
+                hvac_mode: heat
