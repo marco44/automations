@@ -75,33 +75,36 @@ condition:
 action:
   # Wait this time to make sure we don't do this like crazy
   - delay: !input delay_input
-  - service: number.set_value
-    target:
-      entity_id: !input trv_calibration_number
+  - service: retry.actions
     data:
-      value: >-
-            {% set room_temperature = states(temperature_sensor) | float %}
-            {% set trv_temperature = state_attr(trv, "current_temperature") | float(0) %}
+      sequence:
+        - service: number.set_value
+          target:
+            entity_id: !input trv_calibration_number
+          data:
+            value: >-
+                  {% set room_temperature = states(temperature_sensor) | float %}
+                  {% set trv_temperature = state_attr(trv, "current_temperature") | float(0) %}
 
-            {% set trv_calibration = states(trv_calibration_number) | float %}
-            {% set trv_calibration_min = state_attr(trv_calibration_number, "min") | float(-5) %}
-            {% set trv_calibration_max = state_attr(trv_calibration_number, "max") | float(5) %}
-            {% set trv_calibration_step = state_attr(trv_calibration_number, "step") | float(1) %}
+                  {% set trv_calibration = states(trv_calibration_number) | float %}
+                  {% set trv_calibration_min = state_attr(trv_calibration_number, "min") | float(-5) %}
+                  {% set trv_calibration_max = state_attr(trv_calibration_number, "max") | float(5) %}
+                  {% set trv_calibration_step = state_attr(trv_calibration_number, "step") | float(1) %}
 
-            {% set step = trv_calibration_step | string %}
+                  {% set step = trv_calibration_step | string %}
 
-            {% if step.split(".") | length > 1 -%}
-              {% set trv_calibration_step_decimals = step.split(".")[1] | length %}
-            {%- else -%}
-              {% set trv_calibration_step_decimals = 0 %}
-            {%- endif %}
+                  {% if step.split(".") | length > 1 -%}
+                    {% set trv_calibration_step_decimals = step.split(".")[1] | length %}
+                  {%- else -%}
+                    {% set trv_calibration_step_decimals = 0 %}
+                  {%- endif %}
 
 
-            {% set new_trv_calibration = room_temperature - trv_temperature + trv_calibration %}
-            {% set new_trv_calibration_bounded = [ [ (new_trv_calibration - new_trv_calibration % trv_calibration_step) | round(trv_calibration_step_decimals), trv_calibration_min ] | max, trv_calibration_max ] | min %}
+                  {% set new_trv_calibration = room_temperature - trv_temperature + trv_calibration %}
+                  {% set new_trv_calibration_bounded = [ [ (new_trv_calibration - new_trv_calibration % trv_calibration_step) | round(trv_calibration_step_decimals), trv_calibration_min ] | max, trv_calibration_max ] | min %}
 
-            {% if new_trv_calibration_bounded < trv_calibration - trv_calibration_step or trv_calibration + trv_calibration_step < new_trv_calibration_bounded -%}
-              {{ new_trv_calibration_bounded }}
-            {%- else -%}
-              {{ states(trv_calibration_number) }}
-            {%- endif %}
+                  {% if new_trv_calibration_bounded < trv_calibration - trv_calibration_step or trv_calibration + trv_calibration_step < new_trv_calibration_bounded -%}
+                    {{ new_trv_calibration_bounded }}
+                  {%- else -%}
+                    {{ states(trv_calibration_number) }}
+                  {%- endif %}
