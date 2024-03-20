@@ -58,7 +58,8 @@ action:
         data:
           sequence:
             - service: climate.set_hvac_mode
-              entity_id: !input trv_entities
+              target:
+                entity_id: !input trv_entities
               data:
                 hvac_mode: "off"
     else:
@@ -66,6 +67,7 @@ action:
         data:
           sequence:
             - service: climate.set_hvac_mode
-              entity_id: !input trv_entities
+              target:
+                entity_id: !input trv_entities
               data:
                 hvac_mode: heat
