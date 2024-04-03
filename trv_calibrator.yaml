@@ -31,7 +31,7 @@ blueprint:
         duration:
       default:
         hours: 0
-        minutes: 5
+        minutes: 15
         seconds: 0
 
 # We want the latest state to be the one that's going to be applied, so we want to be "suicided" before applying if someone else comes in  in the delay_input
