@@ -44,6 +44,9 @@ trigger:
     to: "off"
     id: window_closed
     for: !input reaction_time_close
+  # trigger it every 2 minutes whatever, in case we lost an event
+  - platform: time_pattern
+    minutes: "/2"
 condition:
   - condition: state
     entity_id: input_boolean.chauffage_mode_ete
@@ -54,22 +57,14 @@ action:
         id:
           - window_open
     then:
-      - service: retry.actions
+      - service: climate.set_hvac_mode
+        target:
+          entity_id: !input trv_entities
         data:
-          retries: 30
-          sequence:
-            - service: climate.set_hvac_mode
-              target:
-                entity_id: !input trv_entities
-              data:
-                hvac_mode: "off"
+          hvac_mode: "off"
     else:
-      - service: retry.actions
+      - service: climate.set_hvac_mode
+        target:
+          entity_id: !input trv_entities
         data:
-          retries: 30
-          sequence:
-            - service: climate.set_hvac_mode
-              target:
-                entity_id: !input trv_entities
-              data:
-                hvac_mode: heat
+          hvac_mode: heat
