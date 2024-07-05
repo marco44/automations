@@ -48,19 +48,26 @@ trigger:
   - platform: time_pattern
     minutes: "/2"
 action:
-  - if:
-      - condition: trigger
-        id:
-          - window_open
-    then:
-      - service: climate.set_hvac_mode
-        target:
-          entity_id: !input trv_entities
-        data:
-          hvac_mode: "off"
-    else:
-      - service: climate.set_hvac_mode
-        target:
-          entity_id: !input trv_entities
-        data:
-          hvac_mode: heat
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: !input window_entity
+            state: "on"
+            for: !input reaction_time_open
+        sequence:
+          - service: climate.set_hvac_mode
+            target:
+              entity_id: !input trv_entities
+            data:
+              hvac_mode: "off"
+      - conditions:
+          - condition: state
+            entity_id: !input window_entity
+            state: "off"
+            for: !input reaction_time_close
+        sequence:
+          - service: climate.set_hvac_mode
+            target:
+              entity_id: !input trv_entities
+            data:
+              hvac_mode: heat
