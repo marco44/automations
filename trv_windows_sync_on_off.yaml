@@ -47,10 +47,6 @@ trigger:
   # trigger it every 2 minutes whatever, in case we lost an event
   - platform: time_pattern
     minutes: "/2"
-condition:
-  - condition: state
-    entity_id: input_boolean.chauffage_mode_ete
-    state: "off"
 action:
   - if:
       - condition: trigger
