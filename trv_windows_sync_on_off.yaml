@@ -46,7 +46,7 @@ trigger:
     for: !input reaction_time_close
   # trigger it every 2 minutes whatever, in case we lost an event
   - platform: time_pattern
-    minutes: "/2"
+    minutes: "/10"
 action:
   - choose:
       - conditions:
