@@ -49,22 +49,28 @@ trigger:
     minutes: "/10"
 action:
   - choose:
-      - conditions:
+      - conditions: # it the window is open and it's heating
           - condition: state
             entity_id: !input window_entity
             state: "on"
             for: !input reaction_time_open
+          - condition: state
+            entity_id: !input trv_entities
+            state: "heat"
         sequence:
           - service: climate.set_hvac_mode
             target:
               entity_id: !input trv_entities
             data:
               hvac_mode: "off"
-      - conditions:
+      - conditions: # if the window is close and it's not heating
           - condition: state
             entity_id: !input window_entity
             state: "off"
             for: !input reaction_time_close
+          - condition: state
+            entity_id: !input trv_entities
+            state: "off"
         sequence:
           - service: climate.set_hvac_mode
             target:
