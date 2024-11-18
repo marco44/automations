@@ -1,0 +1,78 @@
+blueprint:
+  name: delay_radiateur
+  description: Automation pour activer/désactiver un switch avec delai paramétrable. Pour fermer les robinets thermostatiques avec retard (que la chaudière ait le temps de s'arrêter)
+  domain: automation
+
+  input:
+    switch_name:
+      name: Switch Name
+      description: Nom du switch à piloter avec délai
+      selector:
+        entity:
+          domain: switch
+    virtual_switch_name:
+      name: Virtual Switch Name
+      description: Nom du switch virtuel utilisé pour piloter l'autre switch
+      selector:
+        entity:
+          domain: input_boolean
+    delay_activate_input:
+      name: Delay activation
+      description: Delai activation du switch (défaut 0)
+      selector:
+        duration:
+      default:
+        hours: 0
+        minutes: 0
+        seconds: 0
+    delay_deactivate_input:
+      name: Delay désactivation
+      description: Delai désactivation du switch (défaut 5 minutes)
+      selector:
+        duration:
+      default:
+        hours: 0
+        minutes: 5
+        seconds: 0
+
+
+triggers:
+  - trigger: state
+    entity_id:
+      - !input virtual_switch_name
+    from: "off"
+    to: "on"
+    for: !input delay_activate_input
+    id: activate
+  - trigger: state
+    entity_id:
+      - !input virtual_switch_name
+    from: "on"
+    to: "off"
+    for: !input delay_deactivate_input
+    id: deactivate
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - activate
+        sequence:
+          - action: switch.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: !input switch_name
+      - conditions:
+          - condition: trigger
+            id:
+              - deactivate
+        sequence:
+          - action: switch.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: !input switch_name
+mode: queued
+
