@@ -44,6 +44,7 @@ actions:
       - conditions:
           - condition: state
             entity_id: !input delay_deactivate_input
+            for: !input delay_activate_input
             state: "on"
         sequence:
           - action: switch.turn_on
@@ -54,10 +55,7 @@ actions:
       - conditions:
           - condition: state
             entity_id: !input delay_deactivate_input
-            for:
-              hours: 0
-              minutes: 5
-              seconds: 0
+            for: !input delay_deactivate_input
             state: "off"
         sequence:
           - action: switch.turn_off
