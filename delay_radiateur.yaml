@@ -43,7 +43,7 @@ actions:
   - choose:
       - conditions:
           - condition: state
-            entity_id: !input delay_deactivate_input
+            entity_id: !input virtual_switch_name
             for: !input delay_activate_input
             state: "on"
         sequence:
@@ -54,7 +54,7 @@ actions:
               entity_id: !input switch_name
       - conditions:
           - condition: state
-            entity_id: !input delay_deactivate_input
+            entity_id: !input virtual_switch_name
             for: !input delay_deactivate_input
             state: "off"
         sequence:
