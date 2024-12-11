@@ -37,27 +37,14 @@ blueprint:
 
 
 triggers:
-  - trigger: state
-    entity_id:
-      - !input virtual_switch_name
-    from: "off"
-    to: "on"
-    for: !input delay_activate_input
-    id: activate
-  - trigger: state
-    entity_id:
-      - !input virtual_switch_name
-    from: "on"
-    to: "off"
-    for: !input delay_deactivate_input
-    id: deactivate
-conditions: []
+  - trigger: time_pattern
+    minutes: /1
 actions:
   - choose:
       - conditions:
-          - condition: trigger
-            id:
-              - activate
+          - condition: state
+            entity_id: !input delay_deactivate_input
+            state: "on"
         sequence:
           - action: switch.turn_on
             metadata: {}
@@ -65,9 +52,13 @@ actions:
             target:
               entity_id: !input switch_name
       - conditions:
-          - condition: trigger
-            id:
-              - deactivate
+          - condition: state
+            entity_id: !input delay_deactivate_input
+            for:
+              hours: 0
+              minutes: 5
+              seconds: 0
+            state: "off"
         sequence:
           - action: switch.turn_off
             metadata: {}
@@ -75,4 +66,3 @@ actions:
             target:
               entity_id: !input switch_name
 mode: queued
-
