@@ -36,7 +36,7 @@ triggers:
     to: "on"
     for:
       hours: 0
-      minutes: 2
+      minutes: 0
       seconds: 0
     id: opened
   - trigger: state
@@ -45,7 +45,7 @@ triggers:
     to: "off"
     for:
       hours: 0
-      minutes: 10
+      minutes: 0
       seconds: 0
     id: closed
   - trigger: time_pattern
@@ -67,12 +67,12 @@ actions:
             metadata: {}
             data: {}
             target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | last }}"
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | list | last }}"
           - action: switch.turn_on
             metadata: {}
             data: {}
             target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | last }}"
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
       - conditions:
           - condition: trigger
             id:
@@ -82,12 +82,12 @@ actions:
             metadata: {}
             data: {}
             target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | last }}"
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | list| last }}"
           - action: switch.turn_off
             metadata: {}
             data: {}
             target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | last }}"
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
       - conditions:
           - condition: trigger
             id:
@@ -100,7 +100,7 @@ actions:
                 {{ ((states(temperature_sensor) |
                 float ) * 100 )| int }}
             target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'external_measured_room_sensor$')) | last }}"
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'external_measured_room_sensor$')) | list | last }}"
 mode: queued
 max: 10
 trace:
