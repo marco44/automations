@@ -1,0 +1,108 @@
+blueprint:
+  name: Automate Ally
+  description: Manage an Ally TRV
+  domain: automation
+  input:
+    trv:
+      name: Smart TRV
+      description: The TRV to force
+      selector:
+        entity:
+          domain: climate
+    temperature_sensor:
+      name: Temperature Sensor
+      description: Sensor used to measure temperature changes
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
+    window_sensor:
+      name: Window Sensor
+      description: Sensor used to detect window opening
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+
+variables:
+  trv: !input trv
+  temperature_sensor: !input temperature_sensor
+  window_sensor: !input window_sensor
+  
+triggers:
+  - trigger: state
+    entity_id:
+      - !input window_sensor
+    to: "on"
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+    id: opened
+  - trigger: state
+    entity_id:
+      - !input window_sensor
+    to: "off"
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    id: closed
+  - trigger: time_pattern
+    minutes: /10
+    id: set_temperature
+  - trigger: state
+    entity_id:
+      - !input temperature_sensor
+    id: set_temperature
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - opened
+        sequence:
+          - action: switch.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | last }}"
+          - action: switch.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | last }}"
+      - conditions:
+          - condition: trigger
+            id:
+              - closed
+        sequence:
+          - action: switch.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | last }}"
+          - action: switch.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | last }}"
+      - conditions:
+          - condition: trigger
+            id:
+              - set_temperature
+        sequence:
+          - action: number.set_value
+            metadata: {}
+            data:
+              value: >-
+                {{ ((states(temperature_sensor) |
+                float ) * 100 )| int }}
+            target:
+              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'external_measured_room_sensor$')) | last }}"
+mode: queued
+max: 10
+trace:
+  stored_traces: 20
+
