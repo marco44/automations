@@ -49,12 +49,12 @@ triggers:
       seconds: 0
     id: closed
   - trigger: time_pattern
-    minutes: /10
+    minutes: /30
     id: set_temperature
-  - trigger: state
-    entity_id:
-      - !input temperature_sensor
-    id: set_temperature
+#  - trigger: state
+#    entity_id:
+#      - !input temperature_sensor
+#    id: set_temperature
 conditions: []
 actions:
   - choose:
