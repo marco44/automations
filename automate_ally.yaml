@@ -63,11 +63,11 @@ actions:
             id:
               - opened
         sequence:
-          - action: switch.turn_off
-            metadata: {}
-            data: {}
-            target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | list | last }}"
+#          - action: switch.turn_off
+#            metadata: {}
+#            data: {}
+#            target:
+#              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | list | last }}"
           - action: switch.turn_on
             metadata: {}
             data: {}
@@ -78,11 +78,11 @@ actions:
             id:
               - closed
         sequence:
-          - action: switch.turn_on
-            metadata: {}
-            data: {}
-            target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | list| last }}"
+#          - action: switch.turn_on
+#            metadata: {}
+#            data: {}
+#            target:
+#              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'radiator_covered$')) | list| last }}"
           - action: switch.turn_off
             metadata: {}
             data: {}
