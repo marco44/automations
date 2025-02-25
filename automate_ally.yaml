@@ -19,7 +19,7 @@ blueprint:
     window_sensor:
       name: Window Sensor
       description: Sensor used to detect window opening
-      default: {}
+      default: "binary_sensor.sensor_bidon"
       selector:
         entity:
           domain: binary_sensor
