@@ -62,16 +62,6 @@ actions:
       - condition: trigger
         id:
               - opened
-              - time_triggered
-    then:
-          - action: "{{ 'switch.turn_' + states((device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last)}}"
-            metadata: {}
-            data: {}
-            target:
-              entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
-  - if:
-      - condition: trigger
-        id:
               - closed
               - time_triggered
     then:
