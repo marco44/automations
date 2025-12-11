@@ -59,9 +59,8 @@ triggers:
 conditions: []
 actions:
   - if:
-      - conditions:
-          - condition: trigger
-            id:
+      - condition: trigger
+        id:
               - opened
     then:
           - action: switch.turn_on
@@ -70,9 +69,8 @@ actions:
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
   - if:
-      - conditions:
-          - condition: trigger
-            id:
+      - condition: trigger
+        id:
               - closed
     then:
           - action: switch.turn_off
@@ -81,9 +79,8 @@ actions:
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
   - if:
-      - conditions:
-          - condition: trigger
-            id:
+      - condition: trigger
+        id:
               - set_temperature
     then:
           - action: number.set_value
