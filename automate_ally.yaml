@@ -59,35 +59,32 @@ triggers:
 conditions: []
 actions:
   - if:
-      - condition: or
-        conditions:
-            - condition: trigger
-                id:
-                - opened
+      - condition: trigger
+        id:
+              - opened
+              - time_triggered
     then:
-          - action: switch.turn_on
+          - action: "{{ 'switch.turn_' + states((device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last)}}"
             metadata: {}
             data: {}
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
   - if:
-      - condition: or
-        conditions:
-            - condition: trigger
-                id:
-                - closed
+      - condition: trigger
+        id:
+              - closed
+              - time_triggered
     then:
-          - action: switch.turn_off
+          - action: "{{ 'switch.turn_' + states((device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last)}}"
             metadata: {}
             data: {}
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
   - if:
-      - condition: or
-        conditions:
-            - condition: trigger
-                id:
-                - set_temperature
+      - condition: trigger
+        id:
+              - set_temperature
+              - time_triggered
     then:
           - action: number.set_value
             metadata: {}
