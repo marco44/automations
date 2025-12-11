@@ -51,7 +51,7 @@ triggers:
     id: closed
   - trigger: time_pattern
     minutes: /30
-    id: set_temperature
+    id: time_triggered
   - trigger: state
     entity_id:
       - !input temperature_sensor
@@ -59,8 +59,10 @@ triggers:
 conditions: []
 actions:
   - if:
-      - condition: trigger
-        id:
+      - condition: or
+        conditions:
+        - condition: trigger
+            id:
               - opened
     then:
           - action: switch.turn_on
@@ -69,8 +71,10 @@ actions:
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
   - if:
-      - condition: trigger
-        id:
+      - condition: or
+        conditions:
+        - condition: trigger
+            id:
               - closed
     then:
           - action: switch.turn_off
@@ -79,8 +83,10 @@ actions:
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
   - if:
-      - condition: trigger
-        id:
+      - condition: or
+        conditions:
+        - condition: trigger
+            id:
               - set_temperature
     then:
           - action: number.set_value
