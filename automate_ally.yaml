@@ -61,9 +61,9 @@ actions:
   - if:
       - condition: or
         conditions:
-        - condition: trigger
-            id:
-              - opened
+            - condition: trigger
+                id:
+                - opened
     then:
           - action: switch.turn_on
             metadata: {}
@@ -73,9 +73,9 @@ actions:
   - if:
       - condition: or
         conditions:
-        - condition: trigger
-            id:
-              - closed
+            - condition: trigger
+                id:
+                - closed
     then:
           - action: switch.turn_off
             metadata: {}
@@ -85,9 +85,9 @@ actions:
   - if:
       - condition: or
         conditions:
-        - condition: trigger
-            id:
-              - set_temperature
+            - condition: trigger
+                id:
+                - set_temperature
     then:
           - action: number.set_value
             metadata: {}
