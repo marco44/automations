@@ -58,32 +58,34 @@ triggers:
     id: set_temperature
 conditions: []
 actions:
-  - choose:
+  - if:
       - conditions:
           - condition: trigger
             id:
               - opened
-        sequence:
+    then:
           - action: switch.turn_on
             metadata: {}
             data: {}
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
+  - if:
       - conditions:
           - condition: trigger
             id:
               - closed
-        sequence:
+    then:
           - action: switch.turn_off
             metadata: {}
             data: {}
             target:
               entity_id: "{{ (device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last }}"
+  - if:
       - conditions:
           - condition: trigger
             id:
               - set_temperature
-        sequence:
+    then:
           - action: number.set_value
             metadata: {}
             data:
