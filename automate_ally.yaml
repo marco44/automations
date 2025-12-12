@@ -65,7 +65,7 @@ actions:
               - closed
               - time_triggered
     then:
-          - action: "{{ 'switch.turn_' + states((device_entities(device_id(trv))  | select ('search', 'window_open_external$')) | list | last)}}"
+          - action: "{{ 'switch.turn_' + states(window_sensor)}}"
             metadata: {}
             data: {}
             target:
