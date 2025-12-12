@@ -65,7 +65,12 @@ actions:
               - closed
               - time_triggered
     then:
-          - action: "{{ 'switch.turn_' + states(window_sensor)}}"
+          - action: >
+                {% if is_state(window_sensor,'unknown') %}
+                switch.turn_on
+                {% else %}
+                {{ 'switch.turn_' + states(window_sensor)}}
+                {% endif %}
             metadata: {}
             data: {}
             target:
