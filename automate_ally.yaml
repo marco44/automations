@@ -66,7 +66,7 @@ actions:
               - time_triggered
     then:
           - action: >
-                {% if is_state(window_sensor,'unknown') %}
+                {% if states(window_sensor) =='unknown' %}
                 switch.turn_on
                 {% else %}
                 {{ 'switch.turn_' + states(window_sensor)}}
